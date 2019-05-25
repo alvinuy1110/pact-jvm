@@ -1,18 +1,8 @@
 PACT JVM
 --------
 
-Pact Broker
-===========
+* [Pact Broker](.\pact-broker\README.md)
+* [Pact Consumer](.\pact-consumer\README.md)
 
-* Start the broker
 
-```
-docker-compose up -d
-```
-
-* Go to browser
-
-```
-http:\\localhost:8500
-```
 
