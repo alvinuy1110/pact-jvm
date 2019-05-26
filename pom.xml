@@ -23,7 +23,8 @@
 
 	<modules>
 		<module>pact-consumer</module>
-	</modules>
+        <module>pact-provider</module>
+    </modules>
 
 
 	<dependencies>
@@ -54,12 +55,7 @@
 			<version>2.6.0</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.10</version>
-			<scope>test</scope>
-		</dependency>
+
 	</dependencies>
 
 	<build>

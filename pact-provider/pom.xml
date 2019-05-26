@@ -9,7 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pact-consumer</artifactId>
+    <artifactId>pact-provider</artifactId>
+
 
     <dependencies>
 
@@ -40,19 +41,31 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>au.com.dius</groupId>-->
-        <!--<artifactId>pact-jvm-consumer-junit_2.11</artifactId>-->
-        <!--<version>3.5.7</version>-->
-        <!--<scope>test</scope>-->
-        <!--</dependency>-->
-        <!-- https://mvnrepository.com/artifact/au.com.dius/pact-jvm-consumer-junit -->
         <dependency>
             <groupId>au.com.dius</groupId>
-            <artifactId>pact-jvm-consumer-junit_2.12</artifactId>
+            <artifactId>pact-jvm-provider-junit_2.12</artifactId>
             <version>3.6.7</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-provider-spring_2.12</artifactId>
+            <version>3.6.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>au.com.dius</groupId>-->
+            <!--<artifactId>pact-jvm-provider-junit_2.11</artifactId>-->
+            <!--<version>3.5.7</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>au.com.dius</groupId>-->
+            <!--<artifactId>pact-jvm-provider-spring_2.11</artifactId>-->
+            <!--<version>3.5.7</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.assertj</groupId>
@@ -62,21 +75,4 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>au.com.dius</groupId>
-                <artifactId>pact-jvm-provider-maven_2.12</artifactId>
-                <version>3.6.7</version>
-                <configuration>
-                    <!-- where the broker is -->
-                    <pactBrokerUrl>http://localhost:8500</pactBrokerUrl>
-                    <!-- where the pacts are generated -->
-                    <pactDirectory>target/pacts</pactDirectory>
-
-
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
