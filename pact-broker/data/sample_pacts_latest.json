@@ -1,0 +1,124 @@
+{
+  "pacts": [
+    {
+      "createdAt": "2020-09-17T03:27:44+00:00",
+      "_embedded": {
+        "consumer": {
+          "name": "Example App",
+          "_embedded": {
+            "version": {
+              "number": "5556b8149bf8bac76bc30f50a8a2dd4c22c85f30",
+              "_links": {
+                "self": {
+                  "title": "Version",
+                  "name": "5556b8149bf8bac76bc30f50a8a2dd4c22c85f30",
+                  "href": "http://localhost:8500/pacticipants/Example%20App/versions/5556b8149bf8bac76bc30f50a8a2dd4c22c85f30"
+                }
+              }
+            }
+          },
+          "_links": {
+            "self": {
+              "href": "http://localhost:8500/pacticipants/Example%20App"
+            }
+          }
+        },
+        "provider": {
+          "name": "Example API",
+          "_links": {
+            "self": {
+              "href": "http://localhost:8500/pacticipants/Example%20API"
+            }
+          }
+        }
+      },
+      "_links": {
+        "self": [
+          {
+            "href": "http://localhost:8500/pacts/provider/Example%20API/consumer/Example%20App/latest"
+          },
+          {
+            "href": "http://localhost:8500/pacts/provider/Example%20API/consumer/Example%20App/version/5556b8149bf8bac76bc30f50a8a2dd4c22c85f30"
+          }
+        ]
+      }
+    },
+    {
+      "createdAt": "2020-09-17T22:38:43+00:00",
+      "_embedded": {
+        "consumer": {
+          "name": "user_consumer",
+          "_embedded": {
+            "version": {
+              "number": "0.0.1",
+              "_links": {
+                "self": {
+                  "title": "Version",
+                  "name": "0.0.1",
+                  "href": "http://localhost:8500/pacticipants/user_consumer/versions/0.0.1"
+                }
+              }
+            }
+          },
+          "_links": {
+            "self": {
+              "href": "http://localhost:8500/pacticipants/user_consumer"
+            }
+          }
+        },
+        "provider": {
+          "name": "user_provider",
+          "_links": {
+            "self": {
+              "href": "http://localhost:8500/pacticipants/user_provider"
+            }
+          }
+        }
+      },
+      "_links": {
+        "self": [
+          {
+            "href": "http://localhost:8500/pacts/provider/user_provider/consumer/user_consumer/latest"
+          },
+          {
+            "href": "http://localhost:8500/pacts/provider/user_provider/consumer/user_consumer/version/0.0.1"
+          }
+        ]
+      }
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "http://localhost:8500/pacts/latest"
+    },
+    "pb:pacts": [
+      {
+        "href": "http://localhost:8500/pacts/provider/Example%20API/consumer/Example%20App/latest",
+        "title": "Latest pact between Example App and Example API"
+      },
+      {
+        "href": "http://localhost:8500/pacts/provider/user_provider/consumer/user_consumer/latest",
+        "title": "Latest pact between user_consumer and user_provider"
+      }
+    ],
+    "pacts": [
+      {
+        "href": "http://localhost:8500/pacts/provider/Example%20API/consumer/Example%20App/latest",
+        "title": "Latest pact between Example App and Example API",
+        "name": "DEPRECATED - please use the pb:pacts relation"
+      },
+      {
+        "href": "http://localhost:8500/pacts/provider/user_provider/consumer/user_consumer/latest",
+        "title": "Latest pact between user_consumer and user_provider",
+        "name": "DEPRECATED - please use the pb:pacts relation"
+      }
+    ],
+    "curies": [
+      {
+        "name": "pb",
+        "href": "http://localhost:8500/doc/{rel}?context=pacts",
+        "templated": true
+      }
+    ]
+  }
+}

@@ -11,6 +11,12 @@
 
     <artifactId>pact-consumer</artifactId>
 
+    <properties>
+        <pact-jvm.version>4.1.7</pact-jvm.version>
+        <pact-broker.url>http://localhost:8500</pact-broker.url>
+
+        <pact.directory>${project.build.directory}/pacts</pact.directory>
+    </properties>
     <dependencies>
 
         <dependency>
@@ -47,10 +53,27 @@
         <!--<scope>test</scope>-->
         <!--</dependency>-->
         <!-- https://mvnrepository.com/artifact/au.com.dius/pact-jvm-consumer-junit -->
+        <!--        <dependency>-->
+        <!--            <groupId>au.com.dius</groupId>-->
+        <!--            <artifactId>pact-jvm-consumer-junit_2.12</artifactId>-->
+        <!--            <version>3.6.7</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+
+
+        <!-- Java DSL -->
         <dependency>
-            <groupId>au.com.dius</groupId>
-            <artifactId>pact-jvm-consumer-junit_2.12</artifactId>
-            <version>3.6.7</version>
+            <groupId>au.com.dius.pact.consumer</groupId>
+            <artifactId>java8</artifactId>
+            <version>${pact-jvm.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Junit specific -->
+        <dependency>
+            <groupId>au.com.dius.pact.consumer</groupId>
+            <artifactId>junit</artifactId>
+            <version>${pact-jvm.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -65,18 +88,70 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>au.com.dius</groupId>
-                <artifactId>pact-jvm-provider-maven_2.12</artifactId>
-                <version>3.6.7</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
                 <configuration>
-                    <!-- where the broker is -->
-                    <pactBrokerUrl>http://localhost:8500</pactBrokerUrl>
-                    <!-- where the pacts are generated -->
-                    <pactDirectory>target/pacts</pactDirectory>
-
-
+                    <systemPropertyVariables>
+                        <pact.rootDir>${pact.directory}</pact.rootDir>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>au.com.dius.pact.provider</groupId>
+                <artifactId>maven</artifactId>
+                <version>${pact-jvm.version}</version>
+
+                <!-- publish consumer to broker -->
+                <configuration>
+                    <!-- Defaults to ${project.build.directory}/pacts -->
+                    <pactDirectory>${pact.directory}</pactDirectory>
+                    <!-- where the broker is -->
+                    <pactBrokerUrl>${pact-broker.url}</pactBrokerUrl>
+
+                    <!-- Defaults to ${project.version} -->
+                    <!--                    <projectVersion>1.0.100</projectVersion> -->
+                    <trimSnapshot>true</trimSnapshot> <!-- Defaults to false -->
+                    <!-- Defaults to false -->
+                    <skipPactPublish>false</skipPactPublish>
+
+
+                    <!--optional report formats -->
+                    <reports>
+                        <report>console</report>
+                        <report>json</report>
+                        <report>markdown</report>
+                    </reports>
+                </configuration>
+
+                <!--                <configuration>-->
+                <!--                    &lt;!&ndash; where the broker is &ndash;&gt;-->
+                <!--                    <pactBrokerUrl>${pact-broker.url}</pactBrokerUrl>-->
+                <!--                    &lt;!&ndash; where the pacts are generated &ndash;&gt;-->
+                <!--                    <pactDirectory>${pact.directory}</pactDirectory>-->
+
+                <!--                    &lt;!&ndash;optional report formats &ndash;&gt;-->
+                <!--                    <reports>-->
+                <!--                        <report>console</report>-->
+                <!--                        <report>json</report>-->
+                <!--                        <report>markdown</report>-->
+                <!--                    </reports>-->
+                <!--                </configuration>-->
+            </plugin>
+
+            <!--            <plugin>-->
+            <!--                <groupId>au.com.dius</groupId>-->
+            <!--                <artifactId>pact-jvm-provider-maven_2.12</artifactId>-->
+            <!--                <version>3.6.7</version>-->
+            <!--                <configuration>-->
+            <!--                    &lt;!&ndash; where the broker is &ndash;&gt;-->
+            <!--                    <pactBrokerUrl>http://localhost:8500</pactBrokerUrl>-->
+            <!--                    &lt;!&ndash; where the pacts are generated &ndash;&gt;-->
+            <!--                    <pactDirectory>target/pacts</pactDirectory>-->
+
+
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 </project>
