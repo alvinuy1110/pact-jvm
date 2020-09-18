@@ -1,0 +1,13 @@
+pactbroker:
+  host: "localhost"
+  port: "8500"
+  scheme: "http"
+#  auth:
+#    username: "<your broker username>"
+#    password: "<your broker password>"
+
+  # comma-separated list of consumers to filter (optional)
+  consumers:
+
+    # comma-separated list of consumers to filter (optional). default is latest
+#  tag:

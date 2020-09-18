@@ -12,6 +12,16 @@
     <artifactId>pact-provider</artifactId>
 
 
+    <properties>
+        <pact-jvm.version>4.1.0</pact-jvm.version>
+        <pact-jvm-spring.version>4.0.10</pact-jvm-spring.version>
+        <pact-broker.url>http://localhost:8500</pact-broker.url>
+
+        <pact.directory>${project.build.directory}/pacts</pact.directory>
+
+        <pact.verifier.publishResults>false</pact.verifier.publishResults>
+
+    </properties>
     <dependencies>
 
         <dependency>
@@ -21,6 +31,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
         </dependency>
 
         <dependency>
@@ -41,31 +57,37 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/au.com.dius.pact.provider/junit -->
+<!--        <dependency>-->
+<!--            <groupId>au.com.dius.pact.provider</groupId>-->
+<!--            <artifactId>junit</artifactId>-->
+<!--            <version>4.0.10</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>au.com.dius.pact.provider</groupId>-->
+<!--            <artifactId>junit</artifactId>-->
+<!--            <version>${pact-jvm.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/au.com.dius/pact-jvm-provider-junit -->
         <dependency>
             <groupId>au.com.dius</groupId>
-            <artifactId>pact-jvm-provider-junit_2.12</artifactId>
-            <version>3.6.7</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>au.com.dius</groupId>
-            <artifactId>pact-jvm-provider-spring_2.12</artifactId>
-            <version>3.6.7</version>
+            <artifactId>pact-jvm-provider-junit</artifactId>
+            <version>${pact-jvm-spring.version}</version>
             <scope>test</scope>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>au.com.dius</groupId>-->
-            <!--<artifactId>pact-jvm-provider-junit_2.11</artifactId>-->
-            <!--<version>3.5.7</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>au.com.dius</groupId>-->
-            <!--<artifactId>pact-jvm-provider-spring_2.11</artifactId>-->
-            <!--<version>3.5.7</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
+        <!-- note: the version is not up to date with pact Junit -->
+        <!-- If you need to use spring, this should drive the version to use-->
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-provider-spring</artifactId>
+            <version>${pact-jvm-spring.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.assertj</groupId>
@@ -75,4 +97,89 @@
 
     </dependencies>
 
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <pact.verifier.publishResults>${pact.verifier.publishResults}</pact.verifier.publishResults>
+                        <pact.rootDir>${pact.directory}</pact.rootDir>
+
+                        <!-- not sure what this should be -->
+                        <pact.provider.tag>${project.artifactId}</pact.provider.tag>
+                        <pact.provider.version>${project.version}</pact.provider.version>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
+            <!-- If you are using JUnit, you dont need this maven plugin -->
+            <!-- Not Ready -->
+<!--            <plugin>-->
+<!--                <groupId>au.com.dius.pact.provider</groupId>-->
+<!--                <artifactId>maven</artifactId>-->
+<!--                <version>${pact-jvm.version}</version>-->
+
+<!--                <configuration>-->
+<!--                    <serviceProviders>-->
+<!--                        &lt;!&ndash; You can define as many as you need, but each must have a unique name &ndash;&gt;-->
+<!--                        <serviceProvider>-->
+<!--                            <name>user_provider</name>-->
+<!--                            &lt;!&ndash; All the provider properties are optional, and have sensible defaults (shown below) &ndash;&gt;-->
+<!--                            <protocol>http</protocol>-->
+<!--                            <host>localhost</host>-->
+<!--                            <port>8500</port>-->
+<!--                            <path>/</path>-->
+<!--&lt;!&ndash;                            <consumers>&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Again, you can define as many consumers for each provider as you need, but each must have a unique name &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <consumer>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <name>consumer1</name>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    &lt;!&ndash;  currently supports a file path using pactFile or a URL using pactUrl &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <pactFile>path/to/provider1-consumer1-pact.json</pactFile>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </consumer>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </consumers>&ndash;&gt;-->
+<!--                        </serviceProvider>-->
+<!--                    </serviceProviders>-->
+
+<!--                    <configuration>-->
+<!--                        <pact.verifier.publishResults>true</pact.verifier.publishResults>-->
+<!--                    </configuration>-->
+<!--                    &lt;!&ndash;optional report formats &ndash;&gt;-->
+<!--                    <reports>-->
+<!--                        <report>console</report>-->
+<!--                        <report>json</report>-->
+<!--                        <report>markdown</report>-->
+<!--                    </reports>-->
+
+<!--                </configuration>-->
+
+<!--                &lt;!&ndash; publish consumer to broker &ndash;&gt;-->
+<!--&lt;!&ndash;                <configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;                    &lt;!&ndash; Defaults to ${project.build.directory}/pacts &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    <pactDirectory>${pact.directory}</pactDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;                    &lt;!&ndash; where the broker is &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    <pactBrokerUrl>${pact-broker.url}</pactBrokerUrl>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    &lt;!&ndash; Defaults to ${project.version} &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    &lt;!&ndash;                    <projectVersion>1.0.100</projectVersion> &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    <trimSnapshot>true</trimSnapshot> &lt;!&ndash; Defaults to false &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    &lt;!&ndash; Defaults to false &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    <skipPactPublish>false</skipPactPublish>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                    &lt;!&ndash;optional report formats &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    <reports>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <report>console</report>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <report>json</report>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <report>markdown</report>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </reports>&ndash;&gt;-->
+<!--&lt;!&ndash;                </configuration>&ndash;&gt;-->
+
+<!--            </plugin>-->
+
+        </plugins>
+    </build>
 </project>

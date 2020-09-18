@@ -28,3 +28,4 @@ HELP.md
 ### VS Code ###
 .vscode/
 /pact-consumer/target/
+/pact-provider/target/

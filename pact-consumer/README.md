@@ -3,6 +3,9 @@ Pact Consumer
 
 This uses a WireMock server to essentially mock HTTP Responses.
 
+JUnit 4
+=======
+
 Maven Setup
 -----------
 
@@ -168,7 +171,19 @@ Ensure that the plugin (group, artifact, version) matches the dependency version
         </plugins>    </build>
 ```
 
+## Writing Message Tests
 
+### Sample
+
+see [MessageConsumerTest](./src/test/java/com/myproject/pact/consumer/MessageConsumerTest.java)
+
+### Known Limitations
+
+```
+Cannot merge pacts as they are not compatible
+```
+
+* Assign a different consumer name to messaging vs HTTP
 
 Writing Pacts Advance
 ---------------------
@@ -202,11 +217,11 @@ PactDslWithProvider builder....
 
 * Using Junit Rule, the pacts must be in same class as test or the super class
 
+
+
 ## TODO
 
-* state interaction
 * how to write pacts (matching patterns, etc.)
 * tests and provider states
 * using tags in publishing
 
-* Do provider later

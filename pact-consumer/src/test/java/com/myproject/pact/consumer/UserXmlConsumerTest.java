@@ -74,8 +74,8 @@ public class UserXmlConsumerTest {
         return builder
                 // Provider state
                 .given("create user XML")
-                .uponReceiving("a request to save user")
-                .path("/api/user")
+                .uponReceiving("a request to save user XML")
+                .path("/api/userXml")
                 .headers(requestHeaders)
                 .body(requestXml)
                 .method(RequestMethod.POST.name())
@@ -105,8 +105,8 @@ public class UserXmlConsumerTest {
         return builder
                 // Provider state
                 .given("get user XML")
-                .uponReceiving("a request to get user")
-                .path("/api/user")
+                .uponReceiving("a request to get user XML")
+                .path("/api/userXml")
 //                .headers(requestHeaders)
 
                 .method(RequestMethod.GET.name())
@@ -132,7 +132,7 @@ public class UserXmlConsumerTest {
         headers.setContentType(MediaType.TEXT_XML);
         headers.set("SOAPAction", "http://ws.app.com/getVersion");
         HttpEntity<Object> request = new HttpEntity<Object>(xml, headers);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(mockProvider.getUrl() + "/api/user", request, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(mockProvider.getUrl() + "/api/userXml", request, String.class);
         assertEquals(201, responseEntity.getStatusCodeValue());
 
         String xmlResponse = responseEntity.getBody();
@@ -154,7 +154,7 @@ public class UserXmlConsumerTest {
 
         HttpEntity<Object> request = new HttpEntity<Object>( headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(mockProvider.getUrl() + "/api/user", HttpMethod.GET, request, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(mockProvider.getUrl() + "/api/userXml", HttpMethod.GET, request, String.class);
         assertEquals(200, responseEntity.getStatusCodeValue());
 
         String xmlResponse = responseEntity.getBody();

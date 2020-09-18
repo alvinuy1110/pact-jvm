@@ -13,4 +13,9 @@ public class UserService {
 		return new User("fakeUser", "testemail@xyz.com", 33);
 	}
 
+	public User getUser(){
+
+		/* for testing the provider end. This service will be mocked */
+		return new User("fakeUser", "testemail@xyz.com", 33);
+	}
 }

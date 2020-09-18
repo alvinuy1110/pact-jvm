@@ -1,4 +1,4 @@
-package com.myproject.pact.consumer;
+package com.myproject.pact.provider;
 
 public class PactConfig {
 

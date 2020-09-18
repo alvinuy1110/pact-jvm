@@ -1,66 +1,79 @@
 Pact Provider
 =============
 
+This is to demonstrate using Pact as Provider.
+
+NOTE: 
+* For publishing provider verification results to a pact broker, make sure the Java system property pact.provider.version is set with the version of your provider.
+* When a consumer publishes a new Pact to the broker, the provider will fail immediately unless it adds a new verification test
+
+
+JUnit 4
+=======
+
 Maven Setup
 -----------
 
 ## Dependencies
 
 ```
-	<dependency>
-	    <groupId>au.com.dius</groupId>
-	    <artifactId>pact-jvm-provider-junit_2.12</artifactId>
-	    <version>3.6.7</version>
-	     <scope>test</scope>
-	</dependency>
+        <dependency>
+            <groupId>au.com.dius.pact.provider</groupId>
+            <artifactId>junit</artifactId>
+            <version>${pact-jvm.version}</version>
+            <scope>test</scope>
+        </dependency>
 ```
 
 
 ### Spring support
 
 ```
-    <dependency>
-        <groupId>au.com.dius</groupId>
-        <artifactId>pact-jvm-provider-spring_2.12</artifactId>
-        <version>3.6.7</version>
-        <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-provider-spring</artifactId>
+            <version>4.0.10</version>
+            <scope>test</scope>
+        </dependency>
 ```
 
 
-Writing Pacts
+Writing Tests
 -------------
 
-Writing test requires JUnit.
+## Example of E2E with mock Service
 
-## Writing Tests
+This is an example of a Spring Boot Test with Pact.  
 
-This is an example of a Spring Boot Test with Pact
+See [UserProviderJunit4Test](./src/test/java/com/myproject/pact/provider/UserProviderJunit4Test.java)
+
 ### Step 1: Create Test harness
 
 ```
-
 @RunWith(SpringRestPactRunner.class)
+
 @SpringBootTest(classes = PactJvmProviderApplication.class,
         properties = {"spring.profiles.active=test", "spring.cloud.config.enabled=false"},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-
 // settings for pact
-@PactBroker(host = "localhost", port = "8500")
+//@PactBroker(host = "localhost", port = "8500")
+@PactBroker(scheme = "${pactbroker.scheme}", host = "${pactbroker.host}", port = "${pactbroker.port}")
+// provider name
 @Provider("user_provider")
 
 // use this instead if not fetching remotely but from static folder
 //@PactFolder("pacts")
-public class UserProviderTest {
+@Slf4j
+public class UserProviderJunit4Test {
 
-...
-   @LocalServerPort
+    @MockBean
+    private UserService userService;
+
+    @LocalServerPort
     int serverPort;
 
     // if using HttpTarget, pass in a port that will boot the app
     @TestTarget
-//    public final Target target = new HttpTarget(serverPort);
     public final Target target = new SpringBootHttpTarget(serverPort);
 
 ```
@@ -69,29 +82,141 @@ Note:
 
 * Specify the broker location "@PactBroker"
 * Use the correct provider value "@Provider"
+* Use SpringRestPactRunner
+* see [application.yaml](./src/test/resources/application.yaml) for externalized test config
 
 ### Step 2: Create the Test
 
 This will be responsible for validating the pact against this instance of the Provider.
 
 ```
-  // must match the state created by user
-    @State (value = "create user")
+    // must match the state created by user
+    @State(value = "create user")
     public void createUserState() throws Exception {
 
+        // TODO this should fail as the body doesnt match the pact!!!, instead it passes
         // Optional mocks.  Leave empty to invoke real service like E2E
         User user = new User("testuser", "abc@yahoo.com", 311);
         when(userService.saveUser(any(User.class))).thenReturn(user);
     }
 ```
 
-Note: You have to run the test as a class, not method level.
+Note: <b>You have to run the test as a class, not method level.</b>
 
 
+
+## Example of Controller with mock Service
+
+This is an example of a MockMVC Controller test.  This is not an E2E test, and pure mocks involved.   
+
+See [UserControllerJunit4Test](./src/test/java/com/myproject/pact/provider/controller/UserControllerJunit4Test.java)
+
+### Step 1: Create Test harness
+
+```
+@RunWith(SpringRestPactRunner.class)
+
+@SpringBootTest(classes = PactJvmProviderApplication.class,
+        properties = {"spring.profiles.active=test", "spring.cloud.config.enabled=false"},
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+// settings for pact
+//@PactBroker(host = "localhost", port = "8500")
+@PactBroker(scheme = "${pactbroker.scheme}", host = "${pactbroker.host}", port = "${pactbroker.port}")
+// provider name
+@Provider("user_provider")
+
+// use this instead if not fetching remotely but from static folder
+//@PactFolder("pacts")
+@Slf4j
+public class UserProviderJunit4Test {
+
+    @MockBean
+    private UserService userService;
+
+    @LocalServerPort
+    int serverPort;
+
+    // if using HttpTarget, pass in a port that will boot the app
+    @TestTarget
+    public final Target target = new SpringBootHttpTarget(serverPort);
+
+```
+
+Note:
+
+* Specify the broker location "@PactBroker"
+* Use the correct provider value "@Provider"
+* Use SpringRestPactRunner
+* see [application.yaml](./src/test/resources/application.yaml) for externalized test config
+
+### Step 2: Create the Test
+
+This will be responsible for validating the pact against this instance of the Provider.
+
+```
+    // must match the state created by user
+    @State(value = "create user")
+    public void createUserState() throws Exception {
+
+        // TODO this should fail as the body doesnt match the pact!!!, instead it passes
+        // Optional mocks.  Leave empty to invoke real service like E2E
+        User user = new User("testuser", "abc@yahoo.com", 311);
+        when(userService.saveUser(any(User.class))).thenReturn(user);
+    }
+```
+
+Note: <b>You have to run the test as a class, not method level.</b>
+
+
+Pact Verification
+=================
+
+## JUnit4
+
+If you are using JUnit, you don't need the maven plugin.
+
+Just trigger like running tests
+
+```
+mvn clean test
+or
+mvn clean verfiy
+```
+
+### Optional Pact Arguments
+
+|Argument|Description|
+|--------|-----------|
+|pact.provider.tag|comma-separated value to add tags|
+|pact.verifier.publishResults|true - to submit to broker; default is false|
+|pact.verification.report|comma-separated value to specify type of reports. Values: "console","json","markdown"|
+|pact.verification.reportDir| the directory to write reports to (defaults to "target/pact/reports")|
+
+#### Usage
+
+```
+mvn clean test -Dpact.provider.tag=someTag
+```
+
+## Maven Plugin
+
+TODO: create a different project to verify this
+
+```
+mvn pact:verify
+```
 
 TODO
 ----
 
+
 * Response body mismatch but still passes
-* Successful pact verification not published, but failed one does
+
+* state pass into provider 
+* state pass from provider
+
+
+* run with filter 
+
+* spring endpoint example???
 
