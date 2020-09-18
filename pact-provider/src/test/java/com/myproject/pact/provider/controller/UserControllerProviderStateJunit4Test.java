@@ -2,16 +2,14 @@ package com.myproject.pact.provider.controller;
 
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
+import au.com.dius.pact.provider.junit.StateChangeAction;
 import au.com.dius.pact.provider.junit.VerificationReports;
 import au.com.dius.pact.provider.junit.loader.PactBroker;
 import au.com.dius.pact.provider.junit.loader.PactFilter;
-import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import au.com.dius.pact.provider.spring.SpringRestPactRunner;
 import au.com.dius.pact.provider.spring.target.MockMvcTarget;
-import au.com.dius.pact.provider.spring.target.SpringBootHttpTarget;
 import com.myproject.pact.provider.PactConfig;
-import com.myproject.pact.provider.controller.UserController;
 import com.myproject.pact.provider.domain.User;
 import com.myproject.pact.provider.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +23,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -37,6 +34,8 @@ import static org.mockito.Mockito.when;
  * This will NOT  boot the app.  It uses all mock.
  * This may be way faster than booting up the entire app.
  * It will also bypass any filter and/ or advices if not configured.  This can be both good or bad.
+ * <p>
+ * Will demo the Provider State callback
  */
 
 @RunWith(SpringRestPactRunner.class)
@@ -55,9 +54,9 @@ import static org.mockito.Mockito.when;
 
 //@VerificationReports(value = {"console","json","markdown"})
 // optional filter to only whitelist selected interactions
-@PactFilter({"create user","get user","create user XML","get user XML",})
+@PactFilter({"search_user"})
 @Slf4j
-public class UserControllerJunit4Test {
+public class UserControllerProviderStateJunit4Test {
 
     //Create an instance of your controller.  We cannot autowire this as we're not using (and don't want to use)  a Spring test runner.
     @InjectMocks
@@ -65,7 +64,7 @@ public class UserControllerJunit4Test {
 
     //Create an instance of your controller advice (if you have one).  This will be passed to the MockMvcTarget constructor to be wired up with MockMvc.
     //@InjectMocks
-   // private CustomControllerAdvice customControllerAdvice = new CustomControllerAdvice();
+    // private CustomControllerAdvice customControllerAdvice = new CustomControllerAdvice();
 
     //Mock your service logic class.  We'll use this to create scenarios for respective provider states.
     @Mock
@@ -113,36 +112,61 @@ public class UserControllerJunit4Test {
     //=======================================
     // Start of state and Pacts
     //=======================================
+
+    // Not needed since params are passed in the main state method as well
     // must match the state created by user
-    @State(value = "create user")
-    public void createUserState() throws Exception {
+    // Setup before interaction is invoked
+//    @State(value = "search_user", action = StateChangeAction.SETUP)
+    // the Map params is provided by the consumer contract
+    public Map<String, Object> setupSearchUserState(Map<String, String> params) throws Exception {
+        log.info("Inside Provider state: 'search_user' Setup Method");
+
+        log.info("Provided params by consumer");
+        params.forEach((k, v) -> {
+            log.info("Key: {}, Value: {}", k, v);
+        });
+
+        // Do whatever setup needed.  Here we just assign a static value
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("accountNumber", "2222");
+
+        log.info("Exit Provider state 'search_user' Setup Method");
+        return userMap;
+    }
+
+    // Teardown after  interaction is invoked
+    @State(value = "search_user", action = StateChangeAction.TEARDOWN)
+    // the Map params is provided by the consumer contract
+    public void teardownSearchUserState(Map<String, String> params) throws Exception {
+        log.info("Inside Provider state: 'search_user' Teardown Method");
+
+        log.info("Provided params by consumer");
+        params.forEach((k, v) -> {
+            log.info("Key: {}, Value: {}", k, v);
+        });
+
+        // Do whatever teardown needed.
+
+        log.info("Exit Provider state 'search_user' Teardown Method");
+    }
+
+    // Execute actual verification
+    @State(value = "search_user")
+    // the Map params is provided by the consumer contract
+    public void searchUserState(Map<String, String> params) throws Exception {
+
+        log.info("Enter Search user state");
+        log.info("Provided params by consumer");
+        params.forEach((k, v) -> {
+            log.info("Key: {}, Value: {}", k, v);
+        });
+        // Do Something with the provided value like db creation, etc.
 
         User user = new User("testuser", "abc@yahoo.com", 311);
-        when(userService.saveUser(any(User.class))).thenReturn(user);
-    }
+        user.setAccountNum("sss"); // here we just add it back
 
-    // must match the state created by user
-    @State(value = "get user")
-    public void getUserState() throws Exception {
-
-        User user = new User("testuser1", "abc@yahoo.com", 311);
         when(userService.getUser()).thenReturn(user);
-    }
-
-    // must match the state created by user
-    @State(value = "get user XML")
-    public void getUserXmlState() throws Exception {
-
-//        User user = new User("testuser1", "abc@yahoo.com", 311);
-//        when(userService.getUser()).thenReturn(user);
-    }
-
-    // must match the state created by user
-    @State(value = "create user XML")
-    public void createUserXmlState() throws Exception {
-
-//        User user = new User("testuser1", "abc@yahoo.com", 311);
-//        when(userService.getUser()).thenReturn(user);
+        log.info("Exit Search user state");
     }
 
 }

@@ -185,7 +185,7 @@ Cannot merge pacts as they are not compatible
 
 * Assign a different consumer name to messaging vs HTTP
 
-Writing Pacts Advance
+Writing Pacts Guideline
 ---------------------
 
 See https://github.com/DiUS/pact-jvm/blob/v3.5.x/pact-jvm-consumer-junit/src/test/java/au/com/dius/pact/consumer/pactproviderrule/PactProviderWithMultipleFragmentsTest.java#L103
@@ -193,13 +193,17 @@ See https://github.com/DiUS/pact-jvm/blob/v3.5.x/pact-jvm-consumer-junit/src/tes
 ## Terminology
 
 * Fragment - pointer to the Pact to use
-* State - identifies a unique identifier for the MockServer to respond to
+* Interaction - identifies a unique identifier for the MockServer to respond to
 
 ## Writing Tests
 
 * Use fragments to point to the Pact by putting the methodName for the Pact
 
-### Provide Unique/ Proper State
+### Matching
+
+Read up on the behavior for matching...https://docs.pact.io/implementation_guides/jvm/matching
+
+### Provide Unique/ Proper Interaction State
 
 * This example is to give info to the Broker as well and end user what to display
 
@@ -208,10 +212,16 @@ PactDslWithProvider builder....
    builder.given("create user XML")
                 .uponReceiving("a request to save user")
 ```
+### Multiple Providers
+
+The Pact Rule can be used to test with multiple providers.
+Just add a rule to the test class for each provider, and then include all the providers required in the @PactVerification annotation. 
+For an example, look at [PactMultiProviderTest](https://github.com/DiUS/pact-jvm/blob/master/consumer/junit/src/test/java/au/com/dius/pact/consumer/junit/pactproviderrule/PactMultiProviderTest.java)
+
 ## Pact Format
 
 * XML - use PactXmlBuilder
-* JSON - use PactDslJsonBody
+* JSON - use PactDslJsonBody.  See https://docs.pact.io/implementation_guides/jvm/consumer/junit
 
 ## Observations
 

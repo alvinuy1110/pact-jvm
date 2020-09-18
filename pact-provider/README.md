@@ -206,13 +206,18 @@ TODO: create a different project to verify this
 mvn pact:verify
 ```
 
+### Pact Provider State/ Callback
+
+see https://medium.com/testvagrant/pact-steering-providers-with-provider-state-callbacks-179252a5c63e
+
+
 TODO
 ----
 
 
 * Response body mismatch but still passes
 
-* state pass into provider 
+* state pass into provider (done) 
 * state pass from provider
 
 
@@ -220,3 +225,6 @@ TODO
 
 * spring endpoint example???
 
+
+* ci consumer
+* ci producer

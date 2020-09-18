@@ -3,6 +3,7 @@ package com.myproject.pact.provider;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
 import au.com.dius.pact.provider.junit.loader.PactBroker;
+import au.com.dius.pact.provider.junit.loader.PactFilter;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import au.com.dius.pact.provider.spring.SpringRestPactRunner;
@@ -41,6 +42,8 @@ import static org.mockito.Mockito.when;
 // use this instead if not fetching remotely but from static folder
 //@PactFolder("pacts")
 @Slf4j
+// optional filter to only whitelist selected interactions
+@PactFilter({"create user","get user","create user XML","get user XML",})
 public class UserProviderJunit4Test {
 
     @MockBean
@@ -101,10 +104,6 @@ public class UserProviderJunit4Test {
         // TODO this should fail as the body doesnt match the pact!!!, instead it passes
         // Optional mocks.  Leave empty to invoke real service like E2E
 
-        // TODO why name must match??
-        // The name value must match
-        // The email value doest not match
-        // The age (int value) does not match, but passes
         User user = new User("testuser1", "abc@yahoo.com", 311);
         when(userService.getUser()).thenReturn(user);
     }
@@ -116,10 +115,6 @@ public class UserProviderJunit4Test {
         // TODO this should fail as the body doesnt match the pact!!!, instead it passes
         // Optional mocks.  Leave empty to invoke real service like E2E
 
-        // TODO why name must match??
-        // The name value must match
-        // The email value doest not match
-        // The age (int value) does not match, but passes
 //        User user = new User("testuser1", "abc@yahoo.com", 311);
 //        when(userService.getUser()).thenReturn(user);
     }
@@ -131,10 +126,6 @@ public class UserProviderJunit4Test {
         // TODO this should fail as the body doesnt match the pact!!!, instead it passes
         // Optional mocks.  Leave empty to invoke real service like E2E
 
-        // TODO why name must match??
-        // The name value must match
-        // The email value doest not match
-        // The age (int value) does not match, but passes
 //        User user = new User("testuser1", "abc@yahoo.com", 311);
 //        when(userService.getUser()).thenReturn(user);
     }

@@ -53,13 +53,12 @@ public class UserController {
 		return new ResponseEntity(xml, HttpStatus.CREATED);
 	}
 
-//	@GetMapping(value="/user", produces = MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseStatus(HttpStatus.OK)
-//	public User getUser(){
-//		User userResult = userService.getUser();
-//
-//		return userResult;
-//	}
+	@RequestMapping(value="/userSearch", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<User> searchUser(){
+		User userResult = userService.getUser();
+
+		return new ResponseEntity<User>(userResult, HttpStatus.OK);
+	}
 
 	public static Document loadXMLFromString(String xml) throws Exception
 	{
