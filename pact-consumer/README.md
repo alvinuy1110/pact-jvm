@@ -126,8 +126,14 @@ Note: a the goal `install` can be replaced as long as the test executes
 
 ### If you want just to publish pacts
 
+Example: basic
 ```
-mvn pact:publish
+mvn pact:publish 
+```
+
+Example: with tags
+```
+mvn pact:publish -Dpact.consumer.tags=someTag,tagA
 ```
 
 ### Maven Plugin Setup
@@ -251,5 +257,4 @@ tar xzf pact-1.88.5-linux-x86_64.tar.gz
 
 * how to write pacts (matching patterns, etc.)
 * tests and provider states
-* using tags in publishing
 
