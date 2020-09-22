@@ -83,6 +83,7 @@
             <scope>test</scope>
         </dependency>
 
+
     </dependencies>
 
     <build>
@@ -110,8 +111,11 @@
                     <pactBrokerUrl>${pact-broker.url}</pactBrokerUrl>
 
                     <!-- Defaults to ${project.version} -->
-                    <!--                    <projectVersion>1.0.100</projectVersion> -->
-                    <trimSnapshot>true</trimSnapshot> <!-- Defaults to false -->
+
+                    <projectVersion>${project.version}</projectVersion>
+
+                    <!-- the -SNAPSHOT is dropped if set to true -->
+                    <trimSnapshot>false</trimSnapshot> <!-- Defaults to false -->
                     <!-- Defaults to false -->
                     <skipPactPublish>false</skipPactPublish>
 

@@ -210,6 +210,30 @@ mvn pact:verify
 
 see https://medium.com/testvagrant/pact-steering-providers-with-provider-state-callbacks-179252a5c63e
 
+#### Notes
+
+* Having 2 states with same name: (1) with Params; and (2) without Params; both are called
+* Substitution of state values does not seem to work with Spring 
+
+
+PACT CLI
+--------
+
+* https://github.com/pact-foundation/pact-ruby-standalone/releases
+* https://pactflow.io/blog/deploying-your-microservices-with-confidence-using-can-i-deploy/
+* https://kreuzwerker.de/post/integrating-contract-tests-into-build-pipelines-with-pact-broker-and
+
+## Setup
+
+### Releases
+https://github.com/pact-foundation/pact-ruby-standalone/releases 
+
+### Linux 64
+
+```
+curl -LO https://github.com/pact-foundation/pact-ruby-standalone/releases/download/v1.88.5/pact-1.88.5-linux-x86_64.tar.gz
+tar xzf pact-1.88.5-linux-x86_64.tar.gz
+```
 
 TODO
 ----
@@ -218,13 +242,10 @@ TODO
 * Response body mismatch but still passes
 
 * state pass into provider (done) 
-* state pass from provider
+* state pass from provider  (not working as expected)
 
 
 * run with filter 
 
 * spring endpoint example???
 
-
-* ci consumer
-* ci producer

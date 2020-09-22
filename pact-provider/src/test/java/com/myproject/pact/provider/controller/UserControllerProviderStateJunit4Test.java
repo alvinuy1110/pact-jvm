@@ -128,7 +128,7 @@ public class UserControllerProviderStateJunit4Test {
 
         // Do whatever setup needed.  Here we just assign a static value
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put("accountNumber", "2222");
+        userMap.put("accountNum", "2222");
 
         log.info("Exit Provider state 'search_user' Setup Method");
         return userMap;
@@ -153,14 +153,37 @@ public class UserControllerProviderStateJunit4Test {
     // Execute actual verification
     @State(value = "search_user")
     // the Map params is provided by the consumer contract
-    public void searchUserState(Map<String, String> params) throws Exception {
+    public  Map<String, Object>  searchUserStateWithParams(Map<String, String> params) throws Exception {
 
-        log.info("Enter Search user state");
+        log.info("Enter Search user state with Params");
         log.info("Provided params by consumer");
         params.forEach((k, v) -> {
             log.info("Key: {}, Value: {}", k, v);
         });
         // Do Something with the provided value like db creation, etc.
+
+        // Do whatever setup needed.  Here we just assign a static value
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("accountNum", "2222");
+
+
+        User user = new User("testuser", "abc@yahoo.com", 311);
+        user.setAccountNum("sss"); // here we just add it back
+
+
+        when(userService.getUser()).thenReturn(user);
+        log.info("Exit Search user state with Params");
+
+        return userMap;
+    }
+
+
+    // Execute actual verification
+    @State(value = "default")
+    // the Map params is provided by the consumer contract
+    public void defaultState() throws Exception {
+
+        log.info("Enter Search user state");
 
         User user = new User("testuser", "abc@yahoo.com", 311);
         user.setAccountNum("sss"); // here we just add it back
@@ -169,4 +192,15 @@ public class UserControllerProviderStateJunit4Test {
         log.info("Exit Search user state");
     }
 
+// ** sample of generic default state with params to toggle features
+
+    @State("default")
+    public void toDefaultState(Map<String, Object> params) {
+        final boolean userExists = (boolean) params.get("userExists");
+        if (userExists) {
+            // set up user service to return a user
+        } else {
+            // set up user service to return no user
+        }
+    }
 }

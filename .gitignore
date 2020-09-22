@@ -29,3 +29,6 @@ HELP.md
 .vscode/
 /pact-consumer/target/
 /pact-provider/target/
+/pact-consumer/cli/pact/
+/pact-consumer/cli/pact-1.88.6-linux-x86_64.tar.gz
+/cli/

@@ -53,7 +53,7 @@ public class UserConsumerProviderStateTest {
                 .stringType("email", "abc@yahoo.com")  // dont match exact value
 
                 //.stringType("accountNum", "someVal") // dont match value
-                .valueFromProviderState("accountNum", "${accountNumber}","someVal")  // variable replaced by provider
+                .valueFromProviderState("accountNum", "accountNum","someVal")  // variable replaced by provider
 
                 .integerType("age", 35);
 
@@ -71,7 +71,7 @@ public class UserConsumerProviderStateTest {
                 .path("/api/userSearch")
 
                 //.query("accountNum=123") // This is just a dummy
-                .queryParameterFromProviderState("accountNum","${accountNumber}", "123") // use the ${} variable to be substituted by Provider
+                .queryParameterFromProviderState("accountNum","${accountNum}", "123") // use the ${} variable to be substituted by Provider
 
                 .method(RequestMethod.GET.name())
                 .willRespondWith()

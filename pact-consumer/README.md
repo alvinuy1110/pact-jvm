@@ -228,6 +228,24 @@ For an example, look at [PactMultiProviderTest](https://github.com/DiUS/pact-jvm
 * Using Junit Rule, the pacts must be in same class as test or the super class
 
 
+PACT CLI
+--------
+
+* https://github.com/pact-foundation/pact-ruby-standalone/releases
+* https://pactflow.io/blog/deploying-your-microservices-with-confidence-using-can-i-deploy/
+*  https://kreuzwerker.de/post/integrating-contract-tests-into-build-pipelines-with-pact-broker-and
+
+## Setup
+
+### Releases
+https://github.com/pact-foundation/pact-ruby-standalone/releases 
+
+### Linux 64
+
+```
+curl -LO https://github.com/pact-foundation/pact-ruby-standalone/releases/download/v1.88.5/pact-1.88.5-linux-x86_64.tar.gz
+tar xzf pact-1.88.5-linux-x86_64.tar.gz
+```
 
 ## TODO
 
